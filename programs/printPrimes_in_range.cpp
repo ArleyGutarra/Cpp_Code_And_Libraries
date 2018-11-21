@@ -1,3 +1,5 @@
+//Program to print random primes given a range
+
 #include <iostream>
 #include <cmath>
 #include <cstdio>
