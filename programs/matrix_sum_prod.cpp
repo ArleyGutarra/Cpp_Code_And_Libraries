@@ -7,7 +7,7 @@ using namespace std;
 void fillMatrix(int **&, int[]);
 void printMatrix(int **, int[] );
 void sumMatrix(int **&, int **,int **,int[],int[]);
-void prodMatrix(int **&, int **,int **,int[],int[]);
+void prodMatrix(int **&, int **,int **,int[],int[],int[]);
 
 int nRow, nCol;
 
@@ -25,15 +25,19 @@ int main(){
 	sumMatrix(sum1,matrix1,matrix2,size1,size2);
 	printMatrix(sum1, size2);
 	
+	int **prod, sizeprod[2];
+	
+	prodMatrix(prod,matrix1,matrix2,size1,size2,sizeprod);
+	printMatrix(prod,sizeprod);
 	getch();
 	return 0;
 }
 
 //This matrix assign dynamic memory to a matrix given it size ant fill its ellements 
 void fillMatrix(int **&ptr_matrix,int size[]){
-	cout<<"Digite el numero de Filas: ";
+	cout<<"Enter the number of rows: ";
 	cin>>size[0];
-	cout<<"Digite el numero de Columnas: ";
+	cout<<"Enter the number of columns: ";
 	cin>>size[1];
 	
 	ptr_matrix = new int*[size[0]];
@@ -42,7 +46,7 @@ void fillMatrix(int **&ptr_matrix,int size[]){
 		
 	}
 	
-	cout<<"Digitando elementos de la matriz: ";
+	cout<<"Enter the elements of the matrix: ";
 	for (int i=0;i<size[0];i++){
 		for (int j=0; j<size[1];j++){
 			cin>>*(*(ptr_matrix+i)+j);
@@ -65,18 +69,50 @@ void printMatrix(int **ptr_matrix, int size[]){
 void sumMatrix(int **&sum,int **ptr_matrixA,int **ptr_matrixB , int sizeA[], int sizeB[]){
 	if (sizeA[0]==sizeB[0] && sizeA[1]==sizeB[1]){
 		
-		sum = new int*[sizeA[0]];
+		sum = new int*[sizeA[0]]; //Saving memory for rows
 		for (int i=0;i<sizeA[0];i++){
-			sum[i] = new int[sizeA[1]];	
+			sum[i] = new int[sizeA[1]];	//Saving memory for columns
 		}
-		cout<<"La suma de las matrices es: \n";
+		cout<<"The sum of matrices is: \n";
 		for (int i=0;i<sizeA[0];i++){
 			for (int j=0;j<sizeA[1];j++){
 				*(*(sum+i)+j) = *(*(ptr_matrixA+i)+j) + *(*(ptr_matrixB+i)+j);
 			}
 		}
 	}
-	else cout<<"Las matrices no se pueden sumar\n";
+	else cout<<"Matrices can not be added\n";
+}
+
+void prodMatrix(int **&prod,int **ptr_matrixA,int **ptr_matrixB , int sizeA[], int sizeB[],int newsize[]){
+	if (sizeA[1] == sizeB[0]){
+		
+		prod = new int*[sizeA[0]]; //Saving memory for rows
+		for (int i=0;i<sizeA[0];i++){ 
+			prod[i] = new int[sizeB[1]]; //Saving memory for columns
+		}
+		
+		newsize[0] = sizeA[0]; 
+		newsize[1] = sizeB[1];
+		
+		cout<<"The product of matrices is:\n";
+		
+		//Filling the elements of the matrix with 0
+		for (int i=0;i<newsize[0];i++){
+			for (int j=0; j<newsize[1];j++){
+				*(*(prod+i)+j) = 0;
+			}	
+		}
+		
+		for (int i=0;i<sizeA[0];i++){
+			for (int j=0;j<sizeB[1];j++){
+				for (int k=0;k<sizeB[0];k++){
+					*(*(prod+i)+j) += (*(*(ptr_matrixA+i)+k))*(*(*(ptr_matrixB+k)+j));
+				}
+			}
+		}
+		
+	}
+	else cout<<"Matrices can not be multiplied\n";
 }
 
 
